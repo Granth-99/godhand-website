@@ -22,17 +22,18 @@
 
         /* --- VISUAL FX --- */
         
-        /* Custom Cursor */
+        /* Custom Cursor - GPU Accelerated */
         .cursor-dot, .cursor-outline {
             position: fixed; top: 0; left: 0;
-            transform: translate(-50%, -50%); border-radius: 50%;
             z-index: 9999; pointer-events: none;
+            will-change: transform;
         }
-        .cursor-dot { width: 8px; height: 8px; background-color: white; }
+        .cursor-dot { width: 8px; height: 8px; background-color: white; border-radius: 50%; }
         .cursor-outline { 
-            width: 40px; height: 40px; 
+            width: 40px; height: 40px; border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.5); 
             transition: width 0.2s, height 0.2s, background-color 0.2s;
+            will-change: transform, width, height;
         }
         body:hover .cursor-outline.hovered {
             width: 80px; height: 80px;
@@ -40,24 +41,25 @@
             backdrop-filter: blur(2px); border-color: transparent;
         }
 
-        /* Film Grain Overlay */
+        /* Film Grain Overlay - GPU Accelerated */
         .film-grain {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 50; opacity: 0.05;
             background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_overlay.png");
             animation: grain 8s steps(10) infinite;
+            will-change: transform;
         }
         @keyframes grain { 
-            0%, 100% { transform:translate(0, 0) } 
-            10% { transform:translate(-5%, -10%) } 
-            20% { transform:translate(-15%, 5%) } 
-            30% { transform:translate(7%, -25%) } 
-            40% { transform:translate(-5%, 25%) } 
-            50% { transform:translate(-15%, 10%) } 
-            60% { transform:translate(15%, 0%) } 
-            70% { transform:translate(0%, 15%) } 
-            80% { transform:translate(3%, 35%) } 
-            90% { transform:translate(-10%, 10%) } 
+            0%, 100% { transform:translate3d(0, 0, 0) } 
+            10% { transform:translate3d(-5%, -10%, 0) } 
+            20% { transform:translate3d(-15%, 5%, 0) } 
+            30% { transform:translate3d(7%, -25%, 0) } 
+            40% { transform:translate3d(-5%, 25%, 0) } 
+            50% { transform:translate3d(-15%, 10%, 0) } 
+            60% { transform:translate3d(15%, 0%, 0) } 
+            70% { transform:translate3d(0%, 15%, 0) } 
+            80% { transform:translate3d(3%, 35%, 0) } 
+            90% { transform:translate3d(-10%, 10%, 0) } 
         }
 
         /* Cinematic Letterbox Bars */
@@ -78,7 +80,11 @@
 
         /* Card Hover Effects */
         .cine-card { overflow: hidden; position: relative; }
-        .cine-card img { transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s; filter: grayscale(100%); }
+        .cine-card img { 
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s; 
+            filter: grayscale(100%); 
+            will-change: transform, filter;
+        }
         .cine-card:hover img { transform: scale(1.1); filter: grayscale(0%); }
         .cine-overlay {
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
@@ -152,9 +158,9 @@
                     View Works
                 </a>
                 
-                <a href="https://youtu.be/uuapcgPD3vw?si=pf2ksFvWvJpwKIMh" target="_blank" class="hover-trigger flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors duration-300">
+                <a href="https://youtu.be/_Q6MSpgCzVQ?si=vKOasKrSplYFA_kG" target="_blank" class="hover-trigger flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors duration-300">
                     <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                    Latest Release
+                    Latest: The Second Cup
                 </a>
             </div>
         </div>
@@ -174,26 +180,7 @@
             <h2 class="text-6xl md:text-8xl font-black text-outline uppercase">Works</h2>
         </div>
         
-        <!-- NEW FEATURED FILM SECTION -->
-        <div class="mb-24 project-card">
-            <div class="flex items-center gap-4 mb-6">
-                <span class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></span>
-                <h3 class="text-sm font-bold uppercase tracking-[0.4em] text-white">Featured Premiere</h3>
-            </div>
-            
-            <div class="w-full aspect-video bg-zinc-900 relative border border-white/5 overflow-hidden group shadow-2xl">
-                <!-- Using modestbranding and keeping colors sleek to match the site vibe -->
-                <iframe class="absolute inset-0 w-full h-full grayscale-[20%] group-hover:grayscale-0 transition duration-1000" 
-                        src="https://www.youtube.com/embed/uuapcgPD3vw?rel=0&modestbranding=1" 
-                        title="Featured Film by Godhand Films" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-white/5 pt-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
             
             <a href="https://youtu.be/_Q6MSpgCzVQ?si=vKOasKrSplYFA_kG" target="_blank" class="group cursor-pointer project-card hover-trigger block">
                 <div class="cine-card aspect-[16/9] bg-zinc-900 mb-6">
@@ -203,6 +190,18 @@
                     </div>
                 </div>
                 <h3 class="text-3xl font-bold uppercase tracking-tight group-hover:text-red-600 transition">The Second Cup</h3>
+            </a>
+
+            <!-- NEWLY ADDED VIDEO - Displayed uniformly -->
+            <a href="https://youtu.be/uuapcgPD3vw?si=pf2ksFvWvJpwKIMh" target="_blank" class="group cursor-pointer project-card hover-trigger block">
+                <div class="cine-card aspect-[16/9] bg-zinc-900 mb-6">
+                    <!-- Automatically pulls the high-res thumbnail from YouTube -->
+                    <img src="https://img.youtube.com/vi/uuapcgPD3vw/maxresdefault.jpg" class="w-full h-full object-cover">
+                    <div class="cine-overlay absolute inset-0 flex items-end p-8">
+                        <span class="text-red-500 text-xs tracking-[0.3em] uppercase">Now Streaming</span>
+                    </div>
+                </div>
+                <h3 class="text-3xl font-bold uppercase tracking-tight group-hover:text-red-600 transition">Latest Release</h3>
             </a>
 
             <div class="group cursor-pointer project-card hover-trigger">
@@ -224,6 +223,7 @@
                 </div>
                 <h3 class="text-3xl font-bold uppercase tracking-tight group-hover:text-yellow-600 transition">Metaphysical Short</h3>
             </div>
+
         </div>
     </section>
 
@@ -295,21 +295,38 @@
                 y: 80, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out"
             });
 
+            // --- OPTIMIZED CURSOR LOGIC ---
             const cursorDot = document.querySelector('.cursor-dot');
             const cursorOutline = document.querySelector('.cursor-outline');
+            
+            let mouseX = 0, mouseY = 0;
+            let dotX = 0, dotY = 0;
+            let outlineX = 0, outlineY = 0;
 
             window.addEventListener("mousemove", (e) => {
-                const posX = e.clientX;
-                const posY = e.clientY;
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Using requestAnimationFrame and translate3d prevents layout thrashing
+            function animateCursor() {
+                // Adjust speed factors to match original feel
+                dotX += (mouseX - dotX) * 0.5;
+                dotY += (mouseY - dotY) * 0.5;
+                
+                outlineX += (mouseX - outlineX) * 0.2;
+                outlineY += (mouseY - outlineY) * 0.2;
+
                 if(cursorDot) {
-                    cursorDot.style.left = `${posX}px`;
-                    cursorDot.style.top = `${posY}px`;
+                    cursorDot.style.transform = `translate3d(calc(${dotX}px - 50%), calc(${dotY}px - 50%), 0)`;
                 }
                 if(cursorOutline) {
-                    cursorOutline.style.left = `${posX}px`;
-                    cursorOutline.style.top = `${posY}px`;
+                    cursorOutline.style.transform = `translate3d(calc(${outlineX}px - 50%), calc(${outlineY}px - 50%), 0)`;
                 }
-            });
+
+                requestAnimationFrame(animateCursor);
+            }
+            requestAnimationFrame(animateCursor);
 
             document.querySelectorAll('.hover-trigger').forEach(trigger => {
                 trigger.addEventListener('mouseenter', () => {
